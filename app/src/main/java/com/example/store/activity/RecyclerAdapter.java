@@ -8,15 +8,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.store.R;
+import com.example.store.dao.RecyclerViewOnClickListener;
 import com.example.store.model.Product;
 
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerHolder>{
     List<Product> listProduct;
+    RecyclerViewOnClickListener<Product> onClickListener;
 
-    public RecyclerAdapter(List<Product> listProduct) {
+    public RecyclerAdapter(List<Product> listProduct, RecyclerViewOnClickListener<Product> onClickListener) {
         this.listProduct = listProduct;
+        this.onClickListener = onClickListener;
     }
 
     @NonNull
@@ -36,6 +39,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerHolder>{
         //holder.productQuantity.setText(listProduct.get(index).getQuantity().toString());
         holder.productDescription.setText(listProduct.get(index).getDescription());
         //holder.productImage.setImageBitmap(listProduct.get(index).getDescription());
+        holder.bindOnCliclListener(listProduct.get(index), onClickListener);
     }
 
     @Override

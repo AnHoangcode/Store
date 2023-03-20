@@ -6,15 +6,17 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.example.store.dao.CartDAO;
 import com.example.store.dao.ProductDAO;
 import com.example.store.dao.UserDAO;
+import com.example.store.model.Cart;
 import com.example.store.model.Product;
 import com.example.store.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {User.class, Product.class}, version = 2)
+@Database(entities = {User.class, Product.class, Cart.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
@@ -26,6 +28,8 @@ public abstract class AppDatabase extends RoomDatabase {
                     .allowMainThreadQueries().build();
             UserDAO userDAO = INSTANCE.userDAO();
             ProductDAO productDAO = INSTANCE.productDAO();
+            CartDAO cartDAO = INSTANCE.cartDAO();
+            cartDAO.deleteAll();
             userDAO.deleteAll();
             productDAO.deleteAll();
             List<User> userList = userDAO.getAll();
@@ -55,4 +59,5 @@ public abstract class AppDatabase extends RoomDatabase {
     }
     public abstract UserDAO userDAO();
     public abstract ProductDAO productDAO();
+    public abstract CartDAO cartDAO();
 }
