@@ -2,12 +2,14 @@ package com.example.store.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.store.R;
@@ -19,7 +21,9 @@ public class Login extends AppCompatActivity {
 
     EditText et_username, et_password;
     Button btn_login;
+    TextView text_register;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +32,11 @@ public class Login extends AppCompatActivity {
         et_username = findViewById(R.id.username);
         et_password = findViewById(R.id.password);
         btn_login = findViewById(R.id.loginButton);
+        text_register = findViewById(R.id.registerText);
+
+        text_register.setOnClickListener(v -> {
+            startActivity(new Intent(Login.this,Register.class));
+        });
 
         btn_login.setOnClickListener(v -> {
             String accountText = et_username.getText().toString();
@@ -46,6 +55,7 @@ public class Login extends AppCompatActivity {
                         editor.putInt("USER_ID", currentUser.getId());
                         editor.apply();
                         startActivity(new Intent(Login.this,HomeScreen.class));
+                        Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();

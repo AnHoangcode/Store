@@ -12,21 +12,21 @@
         android:theme="@style/Theme.Store"
         tools:targetApi="31">
         <activity
-            android:name=".YourCart"
+            android:name=".activity.YourCart"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".Register"
+            android:name=".activity.Register"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ProductDetail"
+            android:name=".activity.ProductDetail"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

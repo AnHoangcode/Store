@@ -2,6 +2,7 @@ package com.example.store.model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -24,8 +25,17 @@ public class User {
     @ColumnInfo(name = "email")
     private String email;
 
+    @Ignore
     public User(Integer id, String account, String password, String name, String gender, String email) {
         this.id = id;
+        this.account = account;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.email = email;
+    }
+
+    public User(String account, String password, String name, String gender, String email) {
         this.account = account;
         this.password = password;
         this.name = name;
