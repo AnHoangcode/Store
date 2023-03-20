@@ -2,7 +2,9 @@ package com.example.store.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -38,7 +40,13 @@ public class Login extends AppCompatActivity {
                 UserDAO userDAO = db.userDAO();
                 User currentUser = userDAO.authenticate(accountText,passwordText);
                 if (currentUser != null){
-                    startActivity(new Intent(Login.this,HomeScreen.class).putExtra("name",currentUser.getName()));
+                    if (!currentUser.getAccount().equals("admin")){
+                        SharedPreferences userPre = getApplicationContext().getSharedPreferences("userPre", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = userPre.edit();
+                        editor.putInt("USER_ID", currentUser.getId());
+                        editor.apply();
+                        startActivity(new Intent(Login.this,HomeScreen.class));
+                    }
                 }else{
                     Toast.makeText(getApplicationContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
                 }
