@@ -29,6 +29,7 @@ public class RecyclerHolder extends RecyclerView.ViewHolder {
         productManufacturer = itemView.findViewById(R.id.productManufacturer);
         productDescription = itemView.findViewById(R.id.productDescription);
         addCart = itemView.findViewById(R.id.addCartButton);
+//        productQuantity = itemView.findViewById(R.id.quantity);
 //        productImage = itemView.findViewById(R.id.productImage);
     }
     public void bindOnCliclListener(Product product, RecyclerViewOnClickListener<Product> listener){

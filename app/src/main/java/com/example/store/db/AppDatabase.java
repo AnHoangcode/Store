@@ -7,16 +7,18 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.store.dao.CartDAO;
+import com.example.store.dao.OrderDAO;
 import com.example.store.dao.ProductDAO;
 import com.example.store.dao.UserDAO;
 import com.example.store.model.Cart;
+import com.example.store.model.Order;
 import com.example.store.model.Product;
 import com.example.store.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Database(entities = {User.class, Product.class, Cart.class}, version = 3)
+@Database(entities = {User.class, Product.class, Cart.class, Order.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
@@ -29,6 +31,8 @@ public abstract class AppDatabase extends RoomDatabase {
             UserDAO userDAO = INSTANCE.userDAO();
             ProductDAO productDAO = INSTANCE.productDAO();
             CartDAO cartDAO = INSTANCE.cartDAO();
+            OrderDAO  orderDAO = INSTANCE.orderDAO;
+            orderDAO.deleteAll();
             cartDAO.deleteAll();
             userDAO.deleteAll();
             productDAO.deleteAll();
@@ -54,10 +58,12 @@ public abstract class AppDatabase extends RoomDatabase {
     private static List<Product> defaultListProduct(){
         List<Product> list = new ArrayList<>();
         list.add(new Product(1, "Colosseum Guandao", 200, 10, "Male", "Curnon", "42mm"));
-        list.add(new Product(2, "MT20", 200, 10, "Male", "Casio", "38mm"));
+        list.add(new Product(2, "MT20", 150, 10, "Male", "Casio", "38mm"));
+        list.add(new Product(3, "Dark Knight", 1000, 10, "Male", "Rolex", "40mm"));
         return list;
     }
     public abstract UserDAO userDAO();
     public abstract ProductDAO productDAO();
     public abstract CartDAO cartDAO();
+    public abstract OrderDAO orderDAO();
 }

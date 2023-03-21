@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.store.R;
@@ -22,6 +22,7 @@ import com.example.store.model.Product;
 import com.example.store.model.User;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class HomeScreen extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -32,7 +33,8 @@ public class HomeScreen extends AppCompatActivity {
     TextView cartCount;
     List<Cart> cartList;
     User currentUser;
-    int cartItemCount = 0;
+    CardView btn_yourcart;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -42,12 +44,17 @@ public class HomeScreen extends AppCompatActivity {
         recyclerView = findViewById(R.id.product_recycler_horizontal);
         userName = findViewById(R.id.usernameText);
         cartCount = findViewById(R.id.cartItemCountText);
+        btn_yourcart = findViewById(R.id.yourcartButton);
 
-        SharedPreferences userPre = getApplicationContext().getSharedPreferences("userPre", Context.MODE_PRIVATE);
+        btn_yourcart.setOnClickListener(v -> {
+            startActivity(new Intent(HomeScreen.this,YourCart.class));
+        });
+
         AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
         UserDAO userDAO = db.userDAO();
         CartDAO cartDAO = db.cartDAO();
 
+        SharedPreferences userPre = getApplicationContext().getSharedPreferences("userPre", Context.MODE_PRIVATE);
         currentUser = userDAO.getUser(userPre.getInt("USER_ID",1));
         userName.setText(currentUser.getName());
 
@@ -55,13 +62,11 @@ public class HomeScreen extends AppCompatActivity {
         listProduct = productDAO.getAll();
 
         cartList = cartDAO.getListCart(currentUser.getId());
-        cartList.forEach(item -> {
-            cartItemCount = cartItemCount + item.getQuantity();
-        });
-        cartCount.setText(String.valueOf(cartItemCount));
+
 
         linearLayoutManager = new LinearLayoutManager(HomeScreen.this, LinearLayoutManager.HORIZONTAL, false);
         rAdapter = new RecyclerAdapter(listProduct, product -> {
+            AtomicInteger cartItemCount = new AtomicInteger();
             Cart existed = cartDAO.getCart(currentUser.getId(), product.getId());
             if (existed != null){
                 existed.setQuantity(existed.getQuantity() + 1);
@@ -70,8 +75,13 @@ public class HomeScreen extends AppCompatActivity {
                 Cart item = new Cart(currentUser.getId(), product.getId(), 1);
                 cartDAO.insert(item);
             }
+            cartList.forEach(item -> {
+                cartItemCount.set(cartItemCount.get() + item.getQuantity());
+            });
+            cartCount.setText(String.valueOf(cartItemCount.get()+1));
             reloadData();
         });
+
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(rAdapter);
         reloadData();
@@ -80,6 +90,5 @@ public class HomeScreen extends AppCompatActivity {
         AppDatabase db = AppDatabase.getDatabase(getApplicationContext());
         CartDAO cartDAO = db.cartDAO();
         cartList = cartDAO.getListCart(currentUser.getId());
-        cartCount.setText(String.valueOf(cartList.size()));
     }
 }
